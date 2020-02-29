@@ -63,12 +63,12 @@ import Bscroll from 'better-scroll' //引入滚动插件 固定需要把要滚�
             // 在mounted中拿DOM节点
             console.log(document.querySelector('.msgRight'))
             // 左侧滚动板
-            new Bscroll(document.querySelector('.titleLeft'),{
+            new Bscroll(document.getElementById('left'),{
                 click:true,
             })
 
             // 右侧滚动板
-            this.right = new Bscroll(document.querySelector('.msgRight'))
+            this.right = new Bscroll(document.getElementById('right'))
         },
         methods:{
             btncount(i,n){

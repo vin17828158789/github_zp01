@@ -28,6 +28,11 @@ const routes = [
         name: 'business',
         component: () => import('../views/Business.vue')
       },
+      {
+        path:'/discount',
+        name:'discount',
+        component: () => import('../views/Discount.vue')
+      },
     ]
   },
   // {

@@ -34,13 +34,18 @@
             <div class="notice">
                 <h2>公告与活动</h2>
                 <p class="notice">{{data.bulletin}}</p>
-                <p><img src="../assets/imgs/discount_1@2x.png"> 在线支付满28减5，满50减10</p>
+                <!-- <p><img src="../assets/imgs/discount_1@2x.png"> 在线支付满28减5，满50减10</p>
                 <p><img src="../assets/imgs/discount_1@2x.png"> 担任精彩赛</p>
                 <p><img src="../assets/imgs/discount_1@2x.png"> 清肺雪梨汤8折抢购</p>
                 <p><img src="../assets/imgs/discount_1@2x.png"> 特价饮品八折抢购</p>
                 <p><img src="../assets/imgs/discount_1@2x.png"> 单人特色套餐</p>
                 <p><img src="../assets/imgs/discount_1@2x.png"> 该商家支持开发票，请在下单时填写好发票抬头</p>
-                <p><img src="../assets/imgs/discount_1@2x.png"> 已加入‘外卖保’计划，食品安全保障</p>
+                <p><img src="../assets/imgs/discount_1@2x.png"> 已加入‘外卖保’计划，食品安全保障</p> -->
+                <p v-show="item.type != -1" v-for="item in list" :key="item.name">
+                    <img src="../assets/imgs/discount_1@2x.png" style="width:12px;" v-show="item.type == 1">
+                    <img src="../assets/imgs/special_1@2x.png" style="width:12px;" v-show="item.type == 2">
+                    {{ item.name }}
+                </p>
             </div>
         </div>
         <div class="bottom">
@@ -59,17 +64,22 @@
 </template>
 
 <script>
-import {getseller} from '../api/apis.js'
+import {getseller,getgoods} from '../api/apis.js'
     export default {
         data(){
             return {
-                data:{}
+                data:{},
+                list:[]
             }
         },
         created(){
             getseller().then((obj)=>{
                 // console.log(obj.data.data)
                 this.data = obj.data.data
+            }),
+            getgoods().then((res)=>{
+                console.log(res.data.data)
+                this.list = res.data.data
             })
         }
     }
