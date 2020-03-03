@@ -25,53 +25,77 @@
             <router-link to='/business' exact>商家</router-link>
         </div>
         <router-view/>
+        <!-- <transition name="slide-fade"> -->
+            <div class="cat">
+                <transition name="slide-fade">
+                    <div v-if="show" id="box">
+                        <Shoppingcart></Shoppingcart>
+                    </div>
+                </transition>
+            </div>
+        <!-- </transition> -->
         <div class="bottom">
             <div class="left">
-                <div class="left_1" @click='btn'>
-                    <img src="../assets/imgs/shopping_cart.svg" style="width:50px;">
+                <div class="left_1" @click='show = !show'>
+                    <img v-show="totle != 0" src="../assets/imgs/on.png">
+                    <img v-show="totle == 0" src="../assets/imgs/off.png">
                 </div>
                 <div class="mid">
-                    <p class="totle">{{totle}}</p>
+                    <p class="totle">￥{{totle}}</p>
                     <p class="msg">另需配送费￥{{data.deliveryPrice}}元</p>
                 </div>
             </div>
            
-            <div class="right">
+            <div v-show="totle == 0" class="right" style="background:#2B343D;">
                 ￥{{data.minPrice}}起送
+            </div>
+            <div v-show="totle != 0" class="right" >
+                立即结算
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import Shoppingcart from './Shoppingcart'
 import {getseller,getgoods} from '../api/apis.js'
     export default {
+        components: {
+            Shoppingcart,
+        },
         data(){
             return {
+                show: false,
                 data:{},
-                price:[],
-                totle:0,
             }
         },
         created(){
+            // 获取商家信息
             getseller().then( res => {
                 // console.log(res.data.data)
                 this.data = res.data.data;
             })
+            // 获取商品数据
             getgoods().then((res)=>{
                 // console.log(res.data.data)
-                this.price = res.data.data
+                this.$store.commit('changelist',res.data.data)
             })
         },
-        methods:{
-            btn(item){
-                console.log(item)
-            },
-            add(){
-                return this.price.forEach((value)=>{
-                    this.totle += value.foods.price;
+        computed:{
+            // 点餐总价
+            totle(){
+                let totles = 0
+                this.$store.getters.getgoodscarlist.forEach(obj=>{
+                    totles += obj.price*obj.num
                 })
+                return totles
             }
+        },
+        methods:{
+            
+        },
+        mounted(){
+            // console.log(this.price)
         }
     }
 </script>
@@ -80,8 +104,9 @@ import {getseller,getgoods} from '../api/apis.js'
     #main{
         display: flex;
         flex-flow: column;
-        align-items: stretch;
+        // align-items: stretch;
         height: 100%;
+        position: relative;
         .top{
             color: #FDFEFF;
             background: rgba(0, 0, 0, 0.2);
@@ -158,35 +183,42 @@ import {getseller,getgoods} from '../api/apis.js'
         }
         .bottom{
             width: 100%;
-            height: 10vh;
+            height: 60px;
             background: #141c27;
             line-height: 10vh;
             display: flex;
+            color: #fff;
             justify-content: space-between;
             position: fixed;
             bottom: 0;
+            z-index: 2;
             .left{
                 display: flex;
                 .left_1{
                     width: 80px;
                     height: 80px;
-                    background: #2B343D;
+                    background: #141c27;
                     border-radius: 50%;
-                    border: 4px solid #141c27;
+                    border: 4px solid #515151;
                     margin-left: 20px;
                     margin-top: -15px;
                     z-index: 1;
+                    display: flex;
                     text-align: center;
                     img{
-                        vertical-align: middle;
+                        position: relative; 
+                        margin:0 auto;
+                        align-items: center;
+                        width: 50px;
                     }
                 }
                 .mid{
                     display: flex;
                     .totle{
-                        color: #939498;
+                        width: 80px;
                         font-size: 24px;
-                        margin-right: 10px;
+                        margin-left: 10px;
+                        margin-right: 20px;
                     }
                     .msg{
                         padding-left: 10px;
@@ -198,11 +230,37 @@ import {getseller,getgoods} from '../api/apis.js'
             }
             .right{
                 width: 200px;
-                background: #2B343D;
-                color: #939498;
+                background: #f64;
                 font-size: 24px;
                 text-align: center;
             }
         }
+        .cat{
+            width: 100%;
+            position: fixed;
+            z-index: 1;
+            bottom: 60px;
+            position: relative;
+            #box{
+                height: 100%;
+                width: 100%;
+                position: fixed;
+                bottom: 60px;
+                background: rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
+    /* 可以设置不同的进入和离开动画 */
+    /* 设置持续时间和动画函数 */
+    .slide-fade-enter-active {
+    transition: all .8s ease;
+    }
+    .slide-fade-leave-active {
+    transition: all .8s ease;
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+    /* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateY(100px);
+    opacity: 0;
     }
 </style>

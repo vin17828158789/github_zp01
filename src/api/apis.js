@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 var req = axios.create({
-    baseURL: 'http://192.168.137.1:3000', // 默认地址
+    baseURL: 'http://192.168.2.235:3000', // 默认地址
     timeout: 7000, // 超时提醒
 })
 // 商品

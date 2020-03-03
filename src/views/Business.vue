@@ -51,7 +51,11 @@
         <div class="bottom">
             <div class="top">
                 <h2>商家实景</h2>
-                <div class="img">实景内容</div>
+                <div class="img">
+                    <img src="../assets/imgs/3.jpg">
+                    <img src="../assets/imgs/4.jpg">
+                    <img src="../assets/imgs/5.jpg">
+                </div>
             </div>
             <div class="bottom">
                 <h2>商家信息</h2>
@@ -78,7 +82,7 @@ import {getseller,getgoods} from '../api/apis.js'
                 this.data = obj.data.data
             }),
             getgoods().then((res)=>{
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 this.list = res.data.data
             })
         }
@@ -165,11 +169,19 @@ import {getseller,getgoods} from '../api/apis.js'
             margin-bottom: 100px;
             .top{
                 height: 200px;
+                margin-bottom: 60px;
                 h2{
                     margin-left: 20px;
                 }
                 .img{
+                    margin-top: 20px;
                     font-size: 50px;
+                    display: flex;
+                    justify-content: space-around;
+                    img{
+                        height: 200px;
+                        width: 30%;
+                    }
                 }
             }
             .bottom{

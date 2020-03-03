@@ -29,10 +29,10 @@
         <div class="bottom">
                 <ul style="display:flex; text-align: center; list-style: none;">
                     <li class='bgblue' >全部({{data.length}})</li>
-                    <li class='grebg' >满意({{shownot()}})</li>
-                    <li class='redbg' >不满意({{showok()}})</li>
+                    <li class='grebg' >满意({{shownot}})</li>
+                    <li class='redbg' >不满意({{showok}})</li>
                 </ul>
-                <p class="sub"><input :type="checkbox" @click="show()" id="sub"><span>只看有内容的评价</span></p>
+                <p class="sub"><input :type="checkbox" id="sub"><span>只看有内容的评价</span></p>
                 <div class="contant" v-for="item in data" :key="item.id">
                     <div class="msg">
                         <p class="img"><img :src="item.avatar" style="width:20px;"></p>
@@ -79,24 +79,25 @@ import {getratings,getseller} from '../api/apis.js'
             })
         },
         methods:{
+            
+        },
+        computed:{
             shownot(){
                 return this.data.filter(obj=>obj.rateType == 0).length
             },
             showok(){
                 return this.data.filter(obj=>obj.rateType == 1).length
             },
-            show(){
-                if(this.checkbox){
-                    return this.data.filter(obj=>obj.text !== '')
-                }
-            }
         }
     }
 </script>
 
 <style lang="less" scoped>
     #main{
-        height: 70vh;
+        display: flex;
+        flex-flow: column;
+        align-items: stretch;
+        height: 100%;
         background: #F4F5F7;
         overflow-y:auto;
         .bgblue{background: #00A0DC;}
@@ -149,6 +150,9 @@ import {getratings,getseller} from '../api/apis.js'
             }
         }
         .bottom{
+            flex: 1 1 auto;
+            overflow: auto;
+            height: 100%;
             margin-top: 30px;
             background: #fff;
             border-top: 1px solid #EAEBED;
